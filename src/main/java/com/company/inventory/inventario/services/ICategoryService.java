@@ -14,7 +14,7 @@ public interface ICategoryService {
     // Método para criar nova categoria
     public ResponseEntity<CategoryResponseRest> save(Category category);
     // // Método para atualizar categoria
-    // public ResponseEntity<CategoryResponseRest> update(Long id, Category category);
+    public ResponseEntity<CategoryResponseRest> update(Category category, Long id);
     // // Método para excluir categoria
     // public ResponseEntity<CategoryResponseRest> delete(Long id);
 }
