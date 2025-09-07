@@ -6,6 +6,7 @@ import com.company.inventory.inventario.model.Category;
 
 import lombok.Data;
 
+
 @Data
 public class CategoryResponse {
 

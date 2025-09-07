@@ -30,12 +30,14 @@ public class CategoryServiceImpl implements ICategoryService {
         CategoryResponseRest response = new CategoryResponseRest();
 
         try {
-            List<Category> categories = (List<Category>) categoryDao.findAll();
-            response.getCategoryResponse().setCategorys(categories);
+            List<Category> categories = new ArrayList<>();
+            categoryDao.findAll().forEach(categories::add);
+            System.out.println("Categorias encontradas: " + categories.size());
+            response.getCategoryResponse().setCategorys(categories != null ? categories : new ArrayList<>());
             response.setMetadata("Resposta OK", "00", "Resposta bem-sucedida");
         } catch (Exception e) {
             response.setMetadata("Erro na reposta", "-1", "Erro ao buscar categorias");
-            e.getStackTrace();
+            e.printStackTrace();
             return new ResponseEntity<CategoryResponseRest>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
         
@@ -48,6 +50,7 @@ public class CategoryServiceImpl implements ICategoryService {
         CategoryResponseRest response = new CategoryResponseRest();
         List<Category> list = new ArrayList<>();
 
+
         try {
             Optional<Category> category = categoryDao.findById(id);
             if(category.isPresent()){
@@ -58,14 +61,34 @@ public class CategoryServiceImpl implements ICategoryService {
                 response.setMetadata("Resposta NOK", "01", "Categoria não encontrada");
                 return new ResponseEntity<CategoryResponseRest>(response, HttpStatus.NOT_FOUND);
             }
-
         } catch (Exception e) {
             response.setMetadata("Erro na reposta", "-1", "Erro ao buscar por id");
-            e.getStackTrace();
+            e.printStackTrace(); // Para ver o erro completo no console
             return new ResponseEntity<CategoryResponseRest>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
-
         return new ResponseEntity<CategoryResponseRest>(response, HttpStatus.OK);
     }
 
+    @Override
+    @Transactional
+    public ResponseEntity<CategoryResponseRest> save(Category category) {
+        CategoryResponseRest response = new CategoryResponseRest();
+        List<Category> list = new ArrayList<>();
+        try {
+            Category categorySaved = categoryDao.save(category);
+            if(categorySaved != null){
+                list.add(categorySaved);
+                response.getCategoryResponse().setCategorys(list);
+                response.setMetadata("Resposta OK", "00", "Categoria salva com sucesso");
+            } else {
+                response.setMetadata("Resposta NOK", "01", "Categoria não salva");
+                return new ResponseEntity<CategoryResponseRest>(response, HttpStatus.BAD_REQUEST);
+            }
+        } catch (Exception e) {
+            response.setMetadata("Erro na reposta", "-1", "Erro ao salvar categoria");
+            e.printStackTrace(); // Para ver o erro completo no console
+            return new ResponseEntity<CategoryResponseRest>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity<CategoryResponseRest>(response, HttpStatus.OK);
+    }
 }
