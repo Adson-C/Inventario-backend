@@ -125,4 +125,25 @@ public class CategoryServiceImpl implements ICategoryService {
         }
         return new ResponseEntity<CategoryResponseRest>(response, HttpStatus.OK);
     }
+
+    @Override
+    @Transactional
+    public ResponseEntity<CategoryResponseRest> delete(Long id) {
+        CategoryResponseRest response = new CategoryResponseRest();
+        try {
+            Optional<Category> categoryOptional = categoryDao.findById(id);
+            if (categoryOptional.isPresent()) {
+                categoryDao.delete(categoryOptional.get());
+                response.setMetadata("Resposta OK", "00", "Categoria excluída com sucesso");
+            } else {
+                response.setMetadata("Resposta NOK", "01", "Categoria não encontrada");
+                return new ResponseEntity<CategoryResponseRest>(response, HttpStatus.NOT_FOUND);
+            }
+        } catch (Exception e) {
+            response.setMetadata("Erro na reposta", "-1", "Erro ao excluir categoria");
+            e.printStackTrace(); // Para ver o erro completo no console
+            return new ResponseEntity<CategoryResponseRest>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity<CategoryResponseRest>(response, HttpStatus.OK);
+    }
 }

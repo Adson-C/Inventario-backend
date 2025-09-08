@@ -16,5 +16,5 @@ public interface ICategoryService {
     // // Método para atualizar categoria
     public ResponseEntity<CategoryResponseRest> update(Category category, Long id);
     // // Método para excluir categoria
-    // public ResponseEntity<CategoryResponseRest> delete(Long id);
+    public ResponseEntity<CategoryResponseRest> delete(Long id);
 }
