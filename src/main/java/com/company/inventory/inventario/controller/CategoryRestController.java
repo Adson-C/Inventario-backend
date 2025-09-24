@@ -65,7 +65,7 @@ public class CategoryRestController {
      * author <Adson Sa>
      */
     @PutMapping("/categories/{id}")
-    public ResponseEntity<CategoryResponseRest> updateCategory(@RequestBody Category category, @PathVariable Long id) {
+    public ResponseEntity<CategoryResponseRest> updateCategory(@RequestBody Category category, @PathVariable("id") Long id) {
         ResponseEntity<CategoryResponseRest> response = service.update(category, id);
         return response;
     }
@@ -75,7 +75,7 @@ public class CategoryRestController {
      * author <Adson Sa>
      */
     @DeleteMapping("/categories/{id}")
-    public ResponseEntity<CategoryResponseRest> deleteCategory(@PathVariable Long id) {
+    public ResponseEntity<CategoryResponseRest> deleteCategory(@PathVariable("id") Long id) {
         ResponseEntity<CategoryResponseRest> response = service.delete(id);
         return response;
     }

@@ -69,6 +69,7 @@ public class CategoryServiceImpl implements ICategoryService {
         return new ResponseEntity<CategoryResponseRest>(response, HttpStatus.OK);
     }
 
+    @SuppressWarnings("unused")
     @Override
     @Transactional
     public ResponseEntity<CategoryResponseRest> save(Category category) {
@@ -92,6 +93,7 @@ public class CategoryServiceImpl implements ICategoryService {
                     return new ResponseEntity<CategoryResponseRest>(response, HttpStatus.OK);
     }
 
+    @SuppressWarnings("unused")
     @Override
     @Transactional
     public ResponseEntity<CategoryResponseRest> update(Category category, Long id) {
