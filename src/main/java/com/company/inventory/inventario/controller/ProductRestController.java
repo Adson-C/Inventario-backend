@@ -14,6 +14,9 @@ import com.company.inventory.inventario.model.Product;
 import com.company.inventory.inventario.response.ProductResponseRest;
 import com.company.inventory.inventario.services.IProductService;
 import com.company.inventory.inventario.util.Util;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+
 
 @CrossOrigin(origins = {"http://localhost:4200"})
 @RestController
@@ -72,6 +75,18 @@ public class ProductRestController {
 
         return response;
     }
+      /**
+        * search a product by ID
+        * @param id
+        * @return
+       
+        */
+    @GetMapping("/products/{id}")
+    public ResponseEntity<ProductResponseRest> searchById(@PathVariable("id") Long id) {
+        ResponseEntity<ProductResponseRest> response = productService.searchById(id);
+        return response;
+    }
+    
 
     
 }
