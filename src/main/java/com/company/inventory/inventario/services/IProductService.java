@@ -9,6 +9,7 @@ public interface IProductService {
     // CRUD method signatures for Product entity
     public ResponseEntity<ProductResponseRest> save(Product product, Long categoryId);
     public ResponseEntity<ProductResponseRest> searchById(Long id);
+    public ResponseEntity<ProductResponseRest> searchByName(String name);
     // public ResponseEntity<ProductResponseRest> update(Product product, Long id);
     // public ResponseEntity<ProductResponseRest> delete(Long id);
 }

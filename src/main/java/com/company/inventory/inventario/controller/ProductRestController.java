@@ -86,7 +86,15 @@ public class ProductRestController {
         ResponseEntity<ProductResponseRest> response = productService.searchById(id);
         return response;
     }
-    
 
-    
+    /**
+     * search products by name (case insensitive, partial match)
+     * @param name
+     * @return
+     */
+    @GetMapping("/products/filter/{name}")
+    public ResponseEntity<ProductResponseRest> searchByName(@PathVariable("name") String name) {
+        ResponseEntity<ProductResponseRest> response = productService.searchByName(name);
+        return response;
+    }
 }
