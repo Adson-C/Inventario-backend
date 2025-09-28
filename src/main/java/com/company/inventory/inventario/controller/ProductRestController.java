@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,6 +17,7 @@ import com.company.inventory.inventario.response.ProductResponseRest;
 import com.company.inventory.inventario.services.IProductService;
 import com.company.inventory.inventario.util.Util;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 
@@ -118,4 +120,53 @@ public class ProductRestController {
         ResponseEntity<ProductResponseRest> response = productService.deleteById(id);
         return response;
     }
+    /**
+     * update a product by ID
+     * @param id
+     * @param picture
+     * @param name
+     * @param price
+     * @param account
+     * @param categoryId
+     * @return
+     * @throws IOException
+     */
+    @PutMapping("/products/{id}")
+    public ResponseEntity<ProductResponseRest> update(
+                  @PathVariable("id") Long id,
+                  @RequestParam("picture") MultipartFile picture,
+                    @RequestParam("name") String name,
+                    @RequestParam("price") int price,
+                    @RequestParam("account") int account,
+                    @RequestParam("categoryId") Long categoryId) throws IOException
+    {
+        // Validate image size (10MB max)
+        if (picture.getSize() > 10 * 1024 * 1024) {
+            ProductResponseRest errorResponse = new ProductResponseRest();
+            errorResponse.setMetadata("Erro na validação", "-1", "Imagem muito grande. Tamanho máximo: 10MB");
+            return ResponseEntity.badRequest().body(errorResponse);
+        }
+
+        // Validate image type
+        String contentType = picture.getContentType();
+        if (contentType == null || (!contentType.startsWith("image/"))) {
+            ProductResponseRest errorResponse = new ProductResponseRest();
+            errorResponse.setMetadata("Erro na validação", "-1", "Arquivo deve ser uma imagem válida");
+            return ResponseEntity.badRequest().body(errorResponse);
+        }
+
+        Product product = new Product();
+        product.setName(name);
+        product.setAccount(account);
+        product.setPrice(price);
+        
+        // Compress image before saving
+        byte[] compressedPicture = Util.compressZLib(picture.getBytes());
+        product.setPicture(compressedPicture);
+
+        ResponseEntity<ProductResponseRest> response = productService.update(product, categoryId, id);
+
+        return response;
+    }
+
 }
